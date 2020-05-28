@@ -20,16 +20,16 @@ To similiate a kafka set up, we will set up a sample Producer and Consumer under
 ```
 $ sudo docker exec -it kafka /bin/sh
 $ cd /opt/kafka
-$ ./bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic sachin
+$ ./bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic helloworld
 ```
 You can see the list of all topics created using 
 ```
 $ bin/kafka-topics.sh --list --zookeeper zookeeper:2181
 ```
-Now that we have a sample topic called sachin, we will link a producer to this topic. Also, we'll add some data: 
+Now that we have a sample topic called helloworld, we will link a producer to this topic. Also, we'll add some data: 
 
 ```
-$ bin/kafka-console-producer.sh --broker-list localhost:9092 --topic sachin
+$ bin/kafka-console-producer.sh --broker-list localhost:9092 --topic helloworld
 >this is the FIRST message
 >this is the SECOND message
 >this is the THIRD message
@@ -41,7 +41,7 @@ In a second terminal opened at the same location, we'll create a consumer on thi
 ```
 $ sudo docker exec -it kafka /bin/sh
 $ cd opt/kafka
-$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic sachin --from-beginning
+$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic helloworld --from-beginning
 ```
 Creating a script for producer that simulates a constant producer is left to the user as per need.
 
@@ -59,10 +59,12 @@ Metrics can be observed right from the Prometheus dashboard. Click on the graph 
 Login into [Grafana](http://localhost:3000/login) using credentials 'admin' in both user and password fields. You may or may not choose to skip changing the password. 
 
 ### Add Data Source
-Before setting up a dashboard, Prometheus must be added as a data source. Do so by clicking on the Add you first data source card and choosing Prometheus. Assign a suitable name for this and provide the source URL as ``http://localhost:9090/`` and Access type of Browser (not Server). Confirm that everything is set upright with the Save & Test button and return to Grafana dashboard. 
+Before setting up a dashboard, Prometheus must be added as a data source. Do so by clicking on the Add you first data source card and choosing Prometheus. Assign a suitable name for this and provide the source URL as ``http://localhost:9090`` and Access type of Browser (not Server). Confirm that everything is set upright with the Save & Test button and return to Grafana dashboard. 
 
 ### Add basic dashboard
-On the left side of the dashboard, hover over the Create tab and choose Import. Enter 721 under Import via Grafana and Load. Once again, assign a suitable name and choose source as the same Prometheus data source we set up above and import. 
+On the left side of the dashboard, hover over the Create tab and choose Import. Enter ``721`` under Import via Grafana and Load. Once again, assign a suitable name and choose source as the same Prometheus data source we set up above and import. <br>
+The scope of the graphs and refresh rate can be adjusted on the top right of the dashboard.
+
 
 ### Adding metrics to Grafana Panel
 Additional panels can be added by clicking the add panel option and entering the desired query. Grafana suggests possible queries based on the input provided and complete action with ``shift + enter``.
@@ -80,7 +82,7 @@ $ sudo apt-get install ssmtp
 
 Edit the ssmtp.conf file to connect to gmail account: 
 ```
-vi /etc/ssmtp/ssmtp.conf
+$ vi /etc/ssmtp/ssmtp.conf
 root=(emailID)
 mailhub=smtp.gmail.com.587
 FromLineOverride=YES
@@ -95,7 +97,7 @@ Run the command &nbsp;&nbsp;``$ echo “Email using CLI” | ssmtp (emailID)``.
 ### Adding up Alerts Rule to Grafana Panel
 Locate and edit grafana.ini to enable sending emails using SMTP:
 ```
-vi /etc/grafana/grafana.ini
+$ vi /etc/grafana/grafana.ini
 Change SMTP section as shown below:
 [smtp]
 enabled=true
